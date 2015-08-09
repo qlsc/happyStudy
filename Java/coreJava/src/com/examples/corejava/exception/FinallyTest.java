@@ -2,7 +2,7 @@ package com.examples.corejava.exception;
 
 /**
  * Description:  FinalTest
- * exception 中 finally之前的return 和 finally一定执行
+ * 异常中，如果有 finally ，并且有返回值， return 之后，finally也一定执行
  * @auther: qlsc
  * @date: 15/8/8
  */

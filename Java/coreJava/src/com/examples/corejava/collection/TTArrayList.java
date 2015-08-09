@@ -31,14 +31,19 @@ public class TTArrayList {
     }
 
     public void add(Object obj){
+        ensureCapacity();
+
+        elementData[size] = obj;
+        size++;
+    }
+
+    public void ensureCapacity() {
         //判断数组扩容和数据拷贝
         if(size>=elementData.length){
             Object[] newArray = new Object[size*2+1];
             System.arraycopy(elementData,0,newArray,0,elementData.length);
             elementData = newArray;
         }
-        elementData[size] = obj;
-        size++;
     }
 
     public int size(){
@@ -50,18 +55,44 @@ public class TTArrayList {
     }
 
     public Object get(int index){
-        if (index<0||index>=size){
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        rangeCheck(index);
         return elementData[index];
     }
 
     public void remove(int index){
+        rangeCheck(index);
         //删除指定位置的对象
+        int numMoved = size - index -1;
+        if (numMoved>0) {
+            System.arraycopy(elementData, index + 1, elementData, index, numMoved);
+        }
+        elementData[--size] = null;
+    }
+
+    public void remove(Object obj){
+        for (int i = 0; i < size; i++) {
+            if(get(i).equals(obj)){
+                remove(i);
+            }
+        }
+    }
+
+    public Object set(int index,Object obj){
+        rangeCheck(index);
+        Object oldValue = elementData[index];
+        elementData[index] = obj;
+        return oldValue;
+    }
+
+    public void add(int index,Object obj){
+        rangeCheck(index);
+        ensureCapacity();
+        System.arraycopy(elementData,index,elementData,index+1,size-index);
+        elementData[index] = obj;
+        size++;
+    }
+
+    public void rangeCheck(int index) {
         if (index<0||index>=size){
             try {
                 throw new Exception();
@@ -69,9 +100,6 @@ public class TTArrayList {
                 e.printStackTrace();
             }
         }
-        int numMoved = size - index -1;
-        System.arraycopy(elementData,index+1,elementData,index,numMoved);
-        elementData[--size] = null;
     }
     public static void main(String[] args) {
         TTArrayList list = new TTArrayList(3);
